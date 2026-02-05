@@ -1,6 +1,6 @@
-# Project Title
+# PowerShell Utility Scripts
 
-A brief description of what this project does and who it's for.
+A collection of PowerShell utility scripts for common administrative and automation tasks.
 
 ## Table of Contents
 
@@ -11,38 +11,42 @@ A brief description of what this project does and who it's for.
 
 ## Installation
 
-Instructions on how to install and set up the project.
+Instructions on how to use these scripts.
 
-```bash
+```powershell
 # Clone the repository
-git clone https://github.com/yourusername/your-repo.git
+git clone https://github.com/yourusername/PowerShell-Utility.git
 
 # Navigate to the project directory
-cd your-repo
+cd PowerShell-Utility
 
-# Install dependencies
-npm install
+# Set execution policy if needed (run as Administrator)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ## Usage
 
-Examples of how to use the project.
+Examples of how to use the scripts.
 
-```bash
-# Run the project
-npm start
+```powershell
+# Run a script
+.\ScriptName.ps1
+
+# Get help for a script
+Get-Help .\ScriptName.ps1 -Full
 ```
 
 ## Contributing
 
-Guidelines for contributing to the project.
+Contributions are welcome! Please follow these guidelines:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Make your changes.
-4. Commit your changes (`git commit -m 'Add some feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Open a pull request.
+4. Test your scripts thoroughly.
+5. Commit your changes (`git commit -m 'Add some feature'`).
+6. Push to the branch (`git push origin feature-branch`).
+7. Open a pull request.
 
 ## License
 
