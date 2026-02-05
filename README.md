@@ -4,10 +4,23 @@ A collection of PowerShell utility scripts for common administrative and automat
 
 ## Table of Contents
 
+- [About](#about)
 - [Installation](#installation)
-- [Usage](#usage)
+  - [Installing PowerShell](#installing-powershell)
+  - [Installing Required Modules](#installing-required-modules)
+- [PowerShell Profile Setup](#powershell-profile-setup)
+- [Script Categories](#script-categories)
+  - [Azure Scripts](#azure-scripts)
+  - [Office 365 Scripts](#office-365-scripts)
+  - [System Administration Scripts](#system-administration-scripts)
+  - [Fun Scripts](#fun-scripts)
+- [Usage Examples](#usage-examples)
 - [Contributing](#contributing)
 - [License](#license)
+
+## About
+
+This repository provides a curated collection of PowerShell scripts designed to help system administrators and cloud engineers automate common tasks, manage cloud resources, and improve productivity. Whether you're managing Azure infrastructure, Office 365 tenants, or local Windows systems, you'll find useful utilities here.
 
 ## Installation
 
@@ -24,7 +37,7 @@ cd PowerShell-Utility
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-## Usage
+#### macOS
 
 Examples of how to use the scripts.
 
