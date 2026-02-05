@@ -1,74 +1,130 @@
-<##################################################################################################
+<#
+.SYNOPSIS
+    Generates an interactive HTML report of Office 365 tenant configuration and usage.
 
-    Created:  By Randy Bordeaux
-    Date Created:  5/20/2021
-    Date Modified: 
-    Description: 
-    Generate an interactive HTML report on your Office 365 tenant. Report on Users, Tenant information, Groups, Policies, Contacts, Mail Users, Licenses and more!
+.DESCRIPTION
+    This comprehensive reporting script creates a detailed HTML report covering all aspects
+    of your Office 365 tenant including:
+    - User accounts and license assignments
+    - Groups and group memberships
+    - Shared mailboxes and resources
+    - Mail contacts and mail users
+    - Company information and domains
+    - Security policies and admin roles
+    - License usage and distribution
     
+    The report is generated using the ReportHTML module to create an interactive,
+    visually appealing HTML document.
+
+.NOTES
+    Name: O365-Discovery.ps1
+    Author: Randy Bordeaux
+    Date Created: 5/20/2021
+    Version: 1.0
     
     Requirements:
-    AzureAD  Module is required
-      Install-Module -Name AzureAD
+    - AzureAD Module: Install-Module -Name AzureAD
       https://www.powershellgallery.com/packages/azuread/
     
-    ReportHTML Moduile is required
-      Install-Module -Name ReportHTML
+    - ReportHTML Module: Install-Module -Name ReportHTML
       https://www.powershellgallery.com/packages/ReportHTML/
- 
     
-    Documentation
-    
-##################################################################################################>
+    - Office 365 admin credentials
+    - Appropriate admin permissions (Global Reader or higher recommended)
 
+.PARAMETER CompanyLogo
+    URL or UNC path to company logo (displayed on left side of report).
 
-<# Error handling #> 
-    $error.Clear()
-    $ErrorActionPreference = 'silentlycontinue'
- 
-<# Variables #>
-#Company logo that will be displayed on the left, can be URL or UNC
+.PARAMETER RightLogo
+    URL or UNC path to secondary logo (displayed on right side of report).
+
+.PARAMETER ReportSavePath
+    Directory path where the HTML report will be saved.
+
+.PARAMETER LicenseFilter
+    Filter threshold for license counts (default: 9000).
+    Licenses with more units than this value are filtered out.
+
+.PARAMETER IncludeLastLogonTimestamp
+    Include user's last mailbox logon timestamp in the report (default: $False).
+    Warning: This can significantly increase report generation time.
+
+.PARAMETER 2FA
+    Set to $True if your global admin account requires 2FA/MFA (default: $False).
+
+.EXAMPLE
+    .\O365-Discovery.ps1
+    Generates a full Office 365 discovery report with default settings.
+
+.LINK
+    https://www.powershellgallery.com/packages/azuread/
+    https://www.powershellgallery.com/packages/ReportHTML/
+#>
+
+# Configuration variables - Customize these for your environment
+
+# Company logo that will be displayed on the left, can be URL or UNC path
 $CompanyLogo = "https://valhallaitservices.files.wordpress.com/2021/05/cropped-asset-1.png"
- 
-#Logo that will be on the right side, UNC or URL
+
+# Logo that will be on the right side, UNC or URL
 $RightLogo = "https://valhallaitservices.files.wordpress.com/2021/05/amd-e1621871434280.png"
- 
-#Location the report will be saved to
+
+# Location where the report will be saved
 $ReportSavePath = "C:\Reports\"
- 
-#Variable to filter licenses out, in current state will only get licenses with a count less than 9,000 this will help filter free/trial licenses
+
+# Variable to filter licenses out, in current state will only get licenses with a count less than 9,000
+# This helps filter free/trial licenses
 $LicenseFilter = "9000"
- 
-#If you want to include users last logon mailbox timestamp, set this to true
+
+# If you want to include users last logon mailbox timestamp, set this to true
+# Warning: This can significantly increase report generation time
 $IncludeLastLogonTimestamp = $False
- 
-#Set to $True if your global admin requires 2FA
+
+# Set to $True if your global admin requires 2FA/MFA
 $2FA = $False
- 
+
 ########################################
- 
- 
+# Error handling configuration
+########################################
+$error.Clear()
+$ErrorActionPreference = 'silentlycontinue'
+
+# Connect to Office 365 services
 If ($2FA -eq $False)
 {
+    # Connect without 2FA
     $credential = Get-Credential -Message "Please enter your Office 365 credentials"
     Import-Module AzureAD
     Connect-AzureAD -Credential $credential
-    $exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri "https://outlook.office365.com/powershell-liveid/"  -Authentication "Basic" -AllowRedirection -Credential $credential
+    
+    # Establish Exchange Online session
+    $exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange `
+                                     -ConnectionUri "https://outlook.office365.com/powershell-liveid/" `
+                                     -Authentication "Basic" `
+                                     -AllowRedirection `
+                                     -Credential $credential
     Import-PSSession $exchangeSession -AllowClobber
 }
 Else
 {
-    $Modules = dir $Env:LOCALAPPDATA\Apps\2.0\*\CreateExoPSSession.ps1 -Recurse | Select-Object -ExpandProperty Target -First 1
+    # Connect with 2FA/MFA
+    # Locate the Exchange Online PowerShell module for 2FA
+    $Modules = dir $Env:LOCALAPPDATA\Apps\2.0\*\CreateExoPSSession.ps1 -Recurse | 
+               Select-Object -ExpandProperty Target -First 1
+    
     foreach ($Module in $Modules)
     {
      Import-Module "$Module"
     }
-    #Connect to MSOnline w/2FA
+    
+    # Connect to Azure AD with 2FA
     Connect-AzureAD
-    #Connect to Exchange Online w/ 2FA
+    
+    # Connect to Exchange Online with 2FA
     Connect-EXOPSSession
 }
- 
+
+# Initialize data collection arrays
 $Table = New-Object 'System.Collections.Generic.List[System.Object]'
 $LicenseTable = New-Object 'System.Collections.Generic.List[System.Object]'
 $UserTable = New-Object 'System.Collections.Generic.List[System.Object]'
@@ -85,7 +141,8 @@ $StrongPasswordTable = New-Object 'System.Collections.Generic.List[System.Object
 $CompanyInfoTable = New-Object 'System.Collections.Generic.List[System.Object]'
 $MessageTraceTable = New-Object 'System.Collections.Generic.List[System.Object]'
 $DomainTable = New-Object 'System.Collections.Generic.List[System.Object]'
- 
+
+# SKU ID to friendly name mapping for license types
 $Sku = @{
  "O365_BUSINESS_ESSENTIALS"      = "Office 365 Business Essentials"
  "O365_BUSINESS_PREMIUM"      = "Office 365 Business Premium"
