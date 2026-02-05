@@ -4,7 +4,7 @@
 #     Date Created: 8/20/2020
 #     Date Modified: 
 #     Author:  Randy Bordeaux
-#     Description: This script will connect to the Office 365 and force updataes to mailboxes to triffer address list updates
+#     Description: This script will connect to the Office 365 and force updataes to mailboxes to trigger address list updates
 #
 ##########################################################################################################################
 
@@ -22,11 +22,6 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 
 
 Import-PSSession $Session -AllowClobber
-
-
-
-
-
 $mailboxes = Get-Mailbox -Resultsize Unlimited
 $count = $mailboxes.count
 $i=0
