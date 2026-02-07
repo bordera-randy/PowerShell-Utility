@@ -118,6 +118,31 @@ Connect-ExchangeOnline
 
 # Get mailbox statistics
 .\Manage-ExchangeOnline.ps1 -Action GetMailboxStats -Identity "user@contoso.com"
+```
+
+### Discover-M365Tenant.ps1
+
+Discovers Microsoft 365 tenant details.
+
+**Prerequisites:**
+- Microsoft.Graph module
+- Connected to Microsoft Graph: `Connect-MgGraph`
+
+**Features:**
+- Organization details
+- Verified domains
+- Subscribed SKUs
+- JSON/CSV export with logs
+
+**Usage:**
+```powershell
+# Tenant discovery
+Connect-MgGraph -Scopes "Organization.Read.All","Domain.Read.All"
+.\Discover-M365Tenant.ps1
+
+# Export JSON and CSV
+.\Discover-M365Tenant.ps1 -Format Both
+```
 
 # Enable auto-reply
 .\Manage-ExchangeOnline.ps1 -Action SetAutoReply -Identity "user@contoso.com" -AutoReplyMessage "I'm out of office" -EnableAutoReply $true

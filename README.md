@@ -1,34 +1,56 @@
 # PowerShell Utility Scripts
 
-A collection of PowerShell utility scripts for common administrative and automation tasks.
+A curated collection of PowerShell scripts for system administrators and cloud engineers.
+These scripts focus on repeatable tasks, clear output, and safe defaults.
 
 ## Table of Contents
 
-- [About](#about)
-- [Installation](#installation)
-  - [Installing PowerShell](#installing-powershell)
-  - [Installing Required Modules](#installing-required-modules)
-- [PowerShell Profile Setup](#powershell-profile-setup)
-- [Script Categories](#script-categories)
-  - [Azure Scripts](#azure-scripts)
-  - [Office 365 Scripts](#office-365-scripts)
-  - [System Administration Scripts](#system-administration-scripts)
-  - [Fun Scripts](#fun-scripts)
-- [Usage Examples](#usage-examples)
-- [Contributing](#contributing)
-- [License](#license)
+- [PowerShell Utility Scripts](#powershell-utility-scripts)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Repository Structure](#repository-structure)
+  - [Installation](#installation)
+  - [Script Categories](#script-categories)
+    - [Cloud Scripts](#cloud-scripts)
+    - [System Administration Scripts](#system-administration-scripts)
+    - [Fun Scripts](#fun-scripts)
+    - [Functions](#functions)
+  - [Logging](#logging)
+  - [Usage Examples](#usage-examples)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## About
 
-This repository provides a curated collection of PowerShell scripts designed to help system administrators and cloud engineers automate common tasks, manage cloud resources, and improve productivity. Whether you're managing Azure infrastructure, Office 365 tenants, or local Windows systems, you'll find useful utilities here.
+This repository provides practical PowerShell automation for:
+
+- Azure and Microsoft 365 administration
+- Windows system management
+- Reporting and auditing
+- Everyday admin utilities
+
+Scripts include comment-based help, console progress messages, and log files where appropriate.
+
+## Repository Structure
+
+```
+PowerShell-Utility/
+├── scripts/
+│   ├── Cloud/
+│   │   ├── Azure/
+│   │   └── Microsoft365/
+│   ├── SystemAdmin/
+│   └── Fun/
+├── functions/
+├── about.md
+└── README.md
+```
 
 ## Installation
 
-Instructions on how to use these scripts.
-
 ```powershell
 # Clone the repository
-git clone https://github.com/yourusername/PowerShell-Utility.git
+git clone https://github.com/bordera-randy/PowerShell-Utility.git
 
 # Navigate to the project directory
 cd PowerShell-Utility
@@ -37,21 +59,53 @@ cd PowerShell-Utility
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-#### macOS
+## Script Categories
 
-Examples of how to use the scripts.
+### Cloud Scripts
+
+- **Azure**: `scripts/Cloud/Azure/`
+- **Microsoft 365**: `scripts/Cloud/Microsoft365/`
+
+See the folder READMEs for full lists and usage:
+- `scripts/Cloud/README.md`
+- `scripts/Cloud/Azure/README.md`
+- `scripts/Cloud/Microsoft365/README.md`
+
+### System Administration Scripts
+
+Location: `scripts/SystemAdmin/`
+
+### Fun Scripts
+
+Location: `scripts/Fun/`
+
+### Functions
+
+Reusable helper functions and utilities:
+
+- `functions/`
+
+## Logging
+
+Many scripts create logs under their local `logs/` folder. Logs are ignored by git.
+
+## Usage Examples
 
 ```powershell
 # Run a script
-.\ScriptName.ps1
+cd .\scripts\SystemAdmin
+.\Monitor-DiskSpace.ps1
+
+# Azure script example
+cd .\scripts\Cloud\Azure
+Connect-AzAccount
+.\Manage-AzureVMs.ps1 -Action List
 
 # Get help for a script
-Get-Help .\ScriptName.ps1 -Full
+Get-Help .\Manage-AzureVMs.ps1 -Full
 ```
 
 ## Contributing
-
-Contributions are welcome! Please follow these guidelines:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).

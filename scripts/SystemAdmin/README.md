@@ -117,6 +117,76 @@ Analyze Windows Event Logs for errors, warnings, and specific events.
 
 # Get application errors only
 .\Analyze-EventLogs.ps1 -Action ApplicationErrors -Hours 24
+```
+
+### Test-NetConnectionReport.ps1
+
+Tests network connectivity to a host and common ports.
+
+**Features:**
+- DNS resolution and ICMP reachability
+- TCP port checks for multiple ports
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Test common web ports
+.\Test-NetConnectionReport.ps1 -TargetHost "example.com"
+
+# Test custom ports
+.\Test-NetConnectionReport.ps1 -TargetHost "server01" -Port 22,3389
+```
+
+### Test-SftpConnection.ps1
+
+Tests SSH/SFTP connectivity and reads SSH banner.
+
+**Features:**
+- TCP connection to SSH port
+- Reads SSH banner for validation
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Test SFTP connectivity
+.\Test-SftpConnection.ps1 -Host "sftp.example.com"
+```
+
+### Invoke-RestApi.ps1
+
+Executes REST API calls with logging.
+
+**Features:**
+- Supports GET/POST/PUT/PATCH/DELETE
+- Optional JSON body and headers
+- Optional response file output
+
+**Usage:**
+```powershell
+# Simple GET
+.\Invoke-RestApi.ps1 -Method GET -Uri "https://api.github.com/repos/bordera-randy/PowerShell-Utility"
+
+# POST with JSON
+.\Invoke-RestApi.ps1 -Method POST -Uri "https://api.example.com/items" -Body '{"name":"test"}'
+```
+
+### Discover-OnPremEnvironment.ps1
+
+Discovers on-prem environment details and exports results.
+
+**Features:**
+- OS, hardware, disk, and network inventory
+- Optional Active Directory details
+- JSON/CSV export with logs
+
+**Usage:**
+```powershell
+# Basic discovery
+.\Discover-OnPremEnvironment.ps1
+
+# Include running services
+.\Discover-OnPremEnvironment.ps1 -IncludeServices -Format Both
+```
 
 # Get system errors only
 .\Analyze-EventLogs.ps1 -Action SystemErrors -Hours 24
@@ -135,6 +205,58 @@ Analyze Windows Event Logs for errors, warnings, and specific events.
 - `-EventID`: Specific Event ID to search for
 - `-Hours`: Time range to analyze (default: 24 hours)
 - `-MaxEvents`: Maximum events to retrieve (default: 100)
+
+### Collect-SystemInventory.ps1
+
+Collect system inventory details and export to JSON/CSV.
+
+**Features:**
+- OS, hardware, CPU, memory, disk, and network inventory
+- Optional installed update collection
+- JSON and CSV output options
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Local inventory (JSON)
+.\Collect-SystemInventory.ps1
+
+# CSV + JSON with updates
+.\Collect-SystemInventory.ps1 -Format Both -IncludeUpdates
+
+# Remote inventory
+.\Collect-SystemInventory.ps1 -ComputerName "Server01","Server02" -Format Csv
+```
+
+**Parameters:**
+- `-ComputerName`: One or more computer names (default: local computer)
+- `-OutputDirectory`: Output and log directory
+- `-Format`: Json, Csv, or Both
+- `-IncludeUpdates`: Include installed hotfixes
+
+### Backup-EventLogs.ps1
+
+Export event logs to EVTX and recent entries to CSV.
+
+**Features:**
+- Exports System/Application/Security logs by default
+- CSV export for recent entries (last N days)
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Export default logs (last 7 days)
+.\Backup-EventLogs.ps1
+
+# Export specific logs and days
+.\Backup-EventLogs.ps1 -LogName System,Application -Days 3
+```
+
+**Parameters:**
+- `-LogName`: Log names to export
+- `-Days`: Number of days for CSV export
+- `-ComputerName`: Target computer name
+- `-OutputDirectory`: Output and log directory
 
 ## Common Administrative Tasks
 

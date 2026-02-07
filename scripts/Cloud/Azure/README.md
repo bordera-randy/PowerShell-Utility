@@ -94,6 +94,75 @@ Manage Azure Storage Accounts.
 .\Manage-StorageAccounts.ps1 -Action Delete -StorageAccountName "oldstorageacct" -ResourceGroupName "MyRG"
 ```
 
+### Audit-AzureRoleAssignments.ps1
+
+Audit Azure role assignments at subscription or resource group scope.
+
+**Features:**
+- Subscription or resource group scope auditing
+- CSV and JSON export options
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Subscription scope audit
+.\Audit-AzureRoleAssignments.ps1
+
+# Resource group scope audit
+.\Audit-AzureRoleAssignments.ps1 -ResourceGroupName "Prod-RG" -Format Both
+```
+
+**Parameters:**
+- `-ResourceGroupName`: Target resource group
+- `-Scope`: Custom scope (overrides ResourceGroupName)
+- `-OutputDirectory`: Output and log directory
+- `-Format`: Csv, Json, or Both
+
+### Discover-AzureTenant.ps1
+
+Discovers Azure tenant and subscription details.
+
+**Features:**
+- Tenant and subscription inventory
+- JSON/CSV export with logs
+
+**Usage:**
+```powershell
+# Tenant discovery
+.\Discover-AzureTenant.ps1
+
+# Export CSV and JSON
+.\Discover-AzureTenant.ps1 -Format Both
+```
+
+### Tag-AzureResources.ps1
+
+Apply tags to resources in a resource group.
+
+**Features:**
+- Merge new tags with existing tags
+- Optional resource type filter
+- Optional tagging of the resource group itself
+- Console progress and log file
+
+**Usage:**
+```powershell
+# Tag all resources in a resource group
+.\Tag-AzureResources.ps1 -ResourceGroupName "Prod-RG" -Tags @{ Environment = "Prod"; Owner = "IT" }
+
+# Tag only storage accounts
+.\Tag-AzureResources.ps1 -ResourceGroupName "Dev-RG" -ResourceType "Microsoft.Storage/storageAccounts" -Tags @{ Environment = "Dev" }
+
+# Tag resources and the resource group
+.\Tag-AzureResources.ps1 -ResourceGroupName "Prod-RG" -Tags @{ Environment = "Prod" } -IncludeResourceGroup
+```
+
+**Parameters:**
+- `-ResourceGroupName`: Target resource group
+- `-Tags`: Hashtable of tags
+- `-ResourceType`: Optional resource type filter
+- `-IncludeResourceGroup`: Apply tags to the resource group
+
 ## Authentication
 
 Before using these scripts, authenticate to Azure:
